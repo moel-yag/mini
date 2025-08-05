@@ -1,5 +1,53 @@
 #include "../includes/minishell.h"
 
+static int	ft_strcmp(const char *s1, const char *s2)
+{
+    size_t	i;
+
+    i = 0;
+    while (s1[i] && s2[i])
+    {
+        if (s1[i] != s2[i])
+            return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+        i++;
+    }
+    return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+int	handle_heredoc(const char *delimiter)
+{
+    char	*line;
+    int		fd;
+    char	tmp_name[] = "/tmp/.heredocXXXXXX";
+
+    fd = mkstemp(tmp_name);
+    if (fd == -1)
+        return (-1);
+    unlink(tmp_name);
+    while (1)
+    {
+        write(1, "> ", 2);
+        line = NULL;
+        if (getline(&line, (size_t[]){0}, stdin) == -1)
+        {
+            free(line);
+            break ;
+        }
+        if (line && line[strlen(line) - 1] == '\n')
+            line[strlen(line) - 1] = '\0';
+        if (ft_strcmp(line, delimiter) == 0)
+        {
+            free(line);
+            break ;
+        }
+        write(fd, line, strlen(line));
+        write(fd, "\n", 1);
+        free(line);
+    }
+    lseek(fd, 0, SEEK_SET);
+    return (fd);
+}
+
 static void	execute_child_external(t_external_data *data, char **cmd,
 		t_list *redir, char **env)
 {

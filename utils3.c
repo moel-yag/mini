@@ -1,5 +1,35 @@
 #include "../includes/minishell.h"
+/*
 
+int	handle_heredoc(const char *delimiter)
+{
+    char	*line = NULL;
+    size_t	len = 0;
+    int		fd;
+    char	tmp_name[] = "/tmp/minishell_heredoc_XXXXXX";
+
+    fd = mkstemp(tmp_name);
+	if (fd == -1)
+        return (-1);
+    unlink(tmp_name);
+    while (1)
+    {
+        write(1, "> ", 2);
+        if (getline(&line, &len, stdin) == -1)
+            break ;
+		line[strcspn(line, "\n")] = 0;
+		if (strcmp(line, delimiter) == 0)
+			break;
+		write(fd, line, strlen(line));
+		write(fd, "\n", 1);
+        // write(fd, line, strlen(line));
+    }
+    free(line);
+    lseek(fd, 0, SEEK_SET);
+    return (fd);
+}
+
+*/
 static int	ft_strcmp(const char *s1, const char *s2)
 {
     size_t	i;

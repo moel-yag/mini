@@ -1,5 +1,15 @@
 #include "../includes/minishell.h"
 /*
+// in execution/utils3.c
+else if (redir_info->type == TOKEN_HEREDOC)
+		{
+			int fd = handle_heredoc(redir_info->filename);
+			if (fd < 0)
+				return (1);
+			if (dup2(fd, STDIN_FILENO) == -1)
+				return (close(fd), 1);
+			close(fd);
+		}
 
 int	handle_heredoc(const char *delimiter)
 {
